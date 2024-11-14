@@ -52,7 +52,7 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Please Select Catagory</Text>
+      <Text style={styles.title}>Please Select Category</Text>
       <View style={styles.grid}>
         {categories.map((category) => (
           <TouchableOpacity
@@ -71,11 +71,6 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
   );
 };
 
-const { width, height } = Dimensions.get('window');
-const itemWidth = (width - 48) / 2;
-// Calculate height based on 9:16 ratio
-const itemHeight = (itemWidth * 16) / 9;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -93,11 +88,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 16,
   },
   categoryButton: {
-    width: itemWidth,
-    height: itemHeight, // Using the calculated height for 9:16 ratio
+    width: '48%', // Width is 48% to fit two items per row with a small gap
+    aspectRatio: 9 / 16, // Aspect ratio instead of fixed height
     borderRadius: 12,
     overflow: 'hidden',
     elevation: 5,
@@ -127,5 +121,3 @@ const styles = StyleSheet.create({
 });
 
 export default CategorySelection;
-
-//test

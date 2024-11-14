@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Linking,
   SafeAreaView,
-  Image
+  Image,
+  ImageBackground
 } from 'react-native';
 import styles from './LanguageSelectionStyles'; // Import the styles
 
@@ -42,21 +43,24 @@ const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   return (
+
 <SafeAreaView style={styles.container}>
+<ImageBackground style={{flex:1 }}
+    source={require('../../assets/images/Icons/HomePage/homePage.jpg')}
+  >
   <View style={styles.content}>
-    <Image
+    {/* <Image
       source={require('../../assets/images/Logo.png')} 
       style={styles.logo} 
-    />   
+    />    */}
 
     <Text style={styles.title}>Your Favorite Coffee Spot</Text>
+    <View style={styles.languageButtonsRow}>
 
-    <View style={styles.languageContainer}>
       <LanguageButton
         title="کوردی"
         onPress={() => handleLanguageSelect('kurdish')}
       />
-      <View style={styles.languageButtonsRow}>
         <LanguageButton
           title="عربي"
           onPress={() => handleLanguageSelect('arabic')}
@@ -66,7 +70,6 @@ const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
           onPress={() => handleLanguageSelect('english')}
         />
       </View>
-    </View>
 
     <View style={styles.socialMediaContainer}>
       <TouchableOpacity
@@ -74,8 +77,8 @@ const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
         style={styles.socialIcon}
       >
     <Image 
-      source={require('../../assets/images/Facebook.png')} 
-      style={{ width: 70, height: 70, borderRadius: 10 }} 
+      source={require('../../assets/images/Icons/SocialMedia/1/facebook.png')} 
+      style={{ width: 100, height: 100, borderRadius: 10 }} 
       /> 
       </TouchableOpacity>
       <TouchableOpacity
@@ -83,15 +86,17 @@ const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
         style={styles.socialIcon}
       >
     <Image 
-      source={require('../../assets/images/Instagram.png')} 
-      style={{ width: 70, height: 70, borderRadius: 10 }} 
+      source={require('../../assets/images/Icons/SocialMedia/1/instagram.png')} 
+      style={{ width: 100, height: 100, borderRadius: 10 }} 
       />  
            </TouchableOpacity>
       
     </View>
 
     <Text style={styles.location}>Zaxo, New Zaxo</Text>
+    
   </View>
+  </ImageBackground>
 </SafeAreaView>
 
   );
