@@ -7,7 +7,8 @@ import {
   Linking,
   SafeAreaView,
   Image,
-  ImageBackground
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
 import styles from './LanguageSelectionStyles'; // Import the styles
 
@@ -43,62 +44,39 @@ const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   return (
-
-<SafeAreaView style={styles.container}>
-<ImageBackground style={{flex:1 }}
-    source={require('../../assets/images/Icons/HomePage/homePage.jpg')}
-  >
-  <View style={styles.content}>
-    {/* <Image
-      source={require('../../assets/images/Logo.png')} 
-      style={styles.logo} 
-    />    */}
-
-    <Text style={styles.title}>Your Favorite Coffee Spot</Text>
-    <View style={styles.languageButtonsRow}>
-
-      <LanguageButton
-        title="کوردی"
-        onPress={() => handleLanguageSelect('kurdish')}
-      />
-        <LanguageButton
-          title="عربي"
-          onPress={() => handleLanguageSelect('arabic')}
-        />
-        <LanguageButton
-          title="English"
-          onPress={() => handleLanguageSelect('english')}
-        />
-      </View>
-
-    <View style={styles.socialMediaContainer}>
-      <TouchableOpacity
-        onPress={() => handleSocialMediaPress('facebook')}
-        style={styles.socialIcon}
+    <SafeAreaView style={styles.container}>
+      <ImageBackground
+        style={styles.background}
+        source={require('../../assets/images/Icons/HomePage/homePage.jpg')}
       >
-    <Image 
-      source={require('../../assets/images/Icons/SocialMedia/1/facebook.png')} 
-      style={{ width: 100, height: 100, borderRadius: 10 }} 
-      /> 
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => handleSocialMediaPress('instagram')}
-        style={styles.socialIcon}
-      >
-    <Image 
-      source={require('../../assets/images/Icons/SocialMedia/1/instagram.png')} 
-      style={{ width: 100, height: 100, borderRadius: 10 }} 
-      />  
-           </TouchableOpacity>
-      
-    </View>
+        <ScrollView contentContainerStyle={styles.content}>
+          <Text style={styles.title}> Your Favorite Coffee Spot</Text>
+          
+          <View style={styles.languageButtonsRow}>
+            <LanguageButton title="كوردي" onPress={() => handleLanguageSelect('kurdish')} />
+            <LanguageButton title="عربي" onPress={() => handleLanguageSelect('arabic')} />
+            <LanguageButton title="English" onPress={() => handleLanguageSelect('english')} />
+          </View>
 
-    <Text style={styles.location}>Zaxo, New Zaxo</Text>
-    
-  </View>
-  </ImageBackground>
-</SafeAreaView>
+          <View style={styles.socialMediaContainer}>
+            <TouchableOpacity onPress={() => handleSocialMediaPress('facebook')}>
+              <Image 
+                source={require('../../assets/images/Icons/SocialMedia/1/facebook.png')}
+                style={styles.socialIcon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleSocialMediaPress('instagram')}>
+              <Image 
+                source={require('../../assets/images/Icons/SocialMedia/1/instagram.png')}
+                style={styles.socialIcon}
+              />
+            </TouchableOpacity>
+          </View>
 
+          <Text style={styles.location}>Zaxo, New Zaxo</Text>
+        </ScrollView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 

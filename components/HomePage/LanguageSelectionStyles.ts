@@ -1,40 +1,50 @@
 // LanguageSelectionStyles.ts
-import { StyleSheet } from 'react-native';
-// LanguageSelectionStyles.ts
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1B1B1B',
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingVertical: 20,
   },
   logo: {
-    width: '30%',
-    height: '35%',
+    width: width * 0.3,
+    height: height * 0.2,
     marginBottom: 20,
-    marginTop: -40, // Use a negative margin to move it up slightly
+    marginTop: -40, // Move up slightly
+    resizeMode: 'contain',
   },
   title: {
-    fontSize: 24,
+    fontSize: width * 0.06, // Responsive font size
     color: '#FDEAC1',
     fontWeight: 'bold',
     marginBottom: 40,
     textAlign: 'center',
   },
   languageContainer: {
-    width: '100%',
+    width: '90%',
     maxWidth: 300,
     paddingHorizontal: 20,
     marginBottom: 40,
   },
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center', // Adjust to center content
+    alignItems: 'center', // Center the content
+  },
   languageButtonsRow: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    width: '50%',
+    width: '80%',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   languageButton: {
     backgroundColor: '#FDEAC1',
@@ -45,7 +55,7 @@ const styles = StyleSheet.create({
   },
   languageButtonText: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: width * 0.04, // Responsive font size
     color: '#000',
   },
   socialMediaContainer: {
@@ -55,14 +65,14 @@ const styles = StyleSheet.create({
   },
   socialIcon: {
     marginHorizontal: 15,
-  },
-  socialIconText: {
-    color: '#FDEAC1',
-    fontSize: 16,
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
   },
   location: {
     color: '#FDEAC1',
-    fontSize: 16,
+    fontSize: width * 0.04, // Responsive font size
+    textAlign: 'center',
   },
 });
 

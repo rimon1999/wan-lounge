@@ -1,5 +1,5 @@
 import React, { useState, FC, useEffect } from 'react';
-import { Animated, ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
 
 interface DrinkItem {
   id: number;
@@ -16,57 +16,16 @@ interface MenuSectionProps {
 
 const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) => {
   const [selectedSection, setSelectedSection] = useState(initialSection);
-  const [displayedSection, setDisplayedSection] = useState(initialSection);
-  const [animations, setAnimations] = useState<Animated.Value[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
   const screenWidth = Dimensions.get('window').width;
-  const imageSize = (screenWidth - 36) / 2; // 2 items per row with space for margin/padding
-
-  useEffect(() => {
-    initializeAnimations(initialSection);
-  }, []);
-
-  useEffect(() => {
-    if (selectedSection !== displayedSection) {
-      setIsAnimating(true);
-      const newAnimations = sections[selectedSection].items.map(() => new Animated.Value(0));
-      setAnimations(newAnimations);
-
-      setTimeout(() => {
-        setDisplayedSection(selectedSection);
-        animateItems(newAnimations);
-      }, 50);
-    }
-  }, [selectedSection]);
-
-  const initializeAnimations = (section: keyof typeof sections) => {
-    const initialAnimations = sections[section].items.map(() => new Animated.Value(0));
-    setAnimations(initialAnimations);
-    animateItems(initialAnimations);
-  };
-
-  const animateItems = (animationArray: Animated.Value[]) => {
-    const animations = animationArray.map((anim, index) => {
-      return Animated.timing(anim, {
-        toValue: 1,
-        duration: 400,
-        delay: index * 100,
-        useNativeDriver: true,
-      });
-    });
-
-    Animated.stagger(100, animations).start(() => {
-      setIsAnimating(false);
-    });
-  };
+  const screenHeight = Dimensions.get('window').height;
+  const isTablet = screenWidth > 600; // Rough threshold for tablet devices
+  const imageSize = (screenWidth - 36) / (isTablet ? 4 : 2); // 4 items per row on tablets, 2 items on phones
 
   const changeSection = (section: keyof typeof sections) => {
-    if (!isAnimating && section !== selectedSection) {
-      setSelectedSection(section);
-    }
+    setSelectedSection(section);
   };
 
   const openImageModal = (image: any) => {
@@ -82,8 +41,12 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: 'black', padding: 12 }}>
       <View style={{ marginBottom: 12 }}>
-        <Text style={{ fontSize: 22, color: '#FACE8D', fontFamily: 'Dancing Script', textAlign: 'center' }}>{title}</Text>
-        <Text style={{ fontSize: 28, color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Menu</Text>
+        <Text style={{ fontSize: 22, color: '#FACE8D', fontFamily: 'Dancing Script', textAlign: 'center' }}>
+          {title}
+        </Text>
+        <Text style={{ fontSize: isTablet ? 32 : 28, color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
+          Menu
+        </Text>
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 12 }}>
@@ -92,17 +55,13 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
             key={section}
             onPress={() => changeSection(section)}
             style={{ paddingVertical: 6, paddingHorizontal: 14 }}
-            disabled={isAnimating}
           >
             <View style={{ alignItems: 'center' }}>
-              <Image
-                source={sections[section].iconUrl}
-                style={{ width: 80, height: 80, marginBottom: 5 }}
-              />
+              <Image source={sections[section].iconUrl} style={{ width: isTablet ? 100 : 80, height: isTablet ? 100 : 80, marginBottom: 5 }} />
               <Text
                 style={{
                   color: selectedSection === section ? '#FACE8D' : 'white',
-                  fontSize: 16,
+                  fontSize: isTablet ? 18 : 16,
                   textAlign: 'center',
                 }}
               >
@@ -113,32 +72,20 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
         ))}
       </ScrollView>
 
-      <Text style={{ color: '#FACE8D', fontSize: 22, marginBottom: 8 }}>
-        {sections[displayedSection].name}
+      <Text style={{ color: '#FACE8D', fontSize: isTablet ? 26 : 22, marginBottom: 8 }}>
+        {sections[selectedSection].name}
       </Text>
 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-        {sections[displayedSection].items.map((item, index) => (
-          <Animated.View
+        {sections[selectedSection].items.map((item) => (
+          <View
             key={item.id}
             style={{
-              width: imageSize, // Square size for image
+              width: imageSize, // Dynamic image size based on screen width
               marginBottom: 16,
               padding: 10,
               backgroundColor: '#1f1f1f',
               borderRadius: 8,
-              transform: [
-                {
-                  translateY: animations[index]?.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [50, 0],
-                  }) || 0,
-                },
-              ],
-              opacity: animations[index]?.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 1],
-              }) || 0,
             }}
           >
             <TouchableOpacity onPress={() => openImageModal(item.pictureUrl)}>
@@ -146,7 +93,7 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
                 source={item.pictureUrl}
                 style={{
                   width: '100%',
-                  height: imageSize, // Ensure the height is the same as width (square)
+                  height: imageSize, // Ensures the height matches width for square images
                   borderRadius: 8,
                   marginBottom: 8,
                   resizeMode: 'cover',
@@ -154,14 +101,14 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
               />
             </TouchableOpacity>
             <View>
-              <Text style={{ fontSize: 18, fontWeight: '500', color: 'white', textAlign: 'center' }}>
+              <Text style={{ fontSize: isTablet ? 20 : 18, fontWeight: '500', color: 'white', textAlign: 'center' }}>
                 {item.name}
               </Text>
-              <Text style={{ fontSize: 16, color: 'white', fontWeight: 'bold', marginTop: 2, textAlign: 'center' }}>
+              <Text style={{ fontSize: isTablet ? 18 : 16, color: 'white', fontWeight: 'bold', marginTop: 2, textAlign: 'center' }}>
                 {item.price}
               </Text>
             </View>
-          </Animated.View>
+          </View>
         ))}
       </View>
 

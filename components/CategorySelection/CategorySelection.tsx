@@ -23,6 +23,12 @@ type Category = {
 };
 
 const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => {
+  const { width } = Dimensions.get('window');
+  const isTablet = width > 600; // Adjust based on your definition of tablet
+  const buttonWidth = isTablet ? '30%' : '48%';
+  const titleSize = isTablet ? 30 : 24;
+  const padding = isTablet ? 24 : 16;
+
   const categories: Category[] = [
     {
       id: 'coffee',
@@ -51,13 +57,13 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
   ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Please Select Category</Text>
+    <View style={[styles.container, { padding }]}>
+      <Text style={[styles.title, { fontSize: titleSize }]}>Please Select Category</Text>
       <View style={styles.grid}>
         {categories.map((category) => (
           <TouchableOpacity
             key={category.id}
-            style={styles.categoryButton}
+            style={[styles.categoryButton, { width: buttonWidth }]}
             onPress={() => navigation.navigate(category.route)}
           >
             <Image source={category.image} style={styles.categoryImage} />
@@ -75,10 +81,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1a1a1a',
-    padding: 16,
   },
   title: {
-    fontSize: 24,
     fontWeight: 'bold',
     color: '#FDEAC1',
     textAlign: 'center',
@@ -90,8 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   categoryButton: {
-    width: '48%', // Width is 48% to fit two items per row with a small gap
-    aspectRatio: 9 / 16, // Aspect ratio instead of fixed height
+    aspectRatio: 9 / 16,
     borderRadius: 12,
     overflow: 'hidden',
     elevation: 5,
