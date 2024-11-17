@@ -1,5 +1,5 @@
 import React, { useState, FC, useEffect } from 'react';
-import { Animated, ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
 
 interface DrinkItem {
   id: number;
@@ -17,8 +17,6 @@ interface MenuSectionProps {
 const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) => {
   const [selectedSection, setSelectedSection] = useState(initialSection);
   const [displayedSection, setDisplayedSection] = useState(initialSection);
-  const [animations, setAnimations] = useState<Animated.Value[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
@@ -28,46 +26,13 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
   const imageSize = (screenWidth - 36) / (isTablet ? 4 : 2); // 4 items per row on tablets, 2 items on phones
 
   useEffect(() => {
-    initializeAnimations(initialSection);
-  }, []);
-
-  useEffect(() => {
-    if (selectedSection !== displayedSection) {
-      setIsAnimating(true);
-      const newAnimations = sections[selectedSection].items.map(() => new Animated.Value(0));
-      setAnimations(newAnimations);
-
-      setTimeout(() => {
-        setDisplayedSection(selectedSection);
-        animateItems(newAnimations);
-      }, 50);
-    }
-  }, [selectedSection]);
-
-  const initializeAnimations = (section: keyof typeof sections) => {
-    const initialAnimations = sections[section].items.map(() => new Animated.Value(0));
-    setAnimations(initialAnimations);
-    animateItems(initialAnimations);
-  };
-
-  const animateItems = (animationArray: Animated.Value[]) => {
-    const animations = animationArray.map((anim, index) => {
-      return Animated.timing(anim, {
-        toValue: 1,
-        duration: 400,
-        delay: index * 100,
-        useNativeDriver: true,
-      });
-    });
-
-    Animated.stagger(100, animations).start(() => {
-      setIsAnimating(false);
-    });
-  };
+    setDisplayedSection(initialSection);
+  }, [initialSection]);
 
   const changeSection = (section: keyof typeof sections) => {
-    if (!isAnimating && section !== selectedSection) {
+    if (section !== selectedSection) {
       setSelectedSection(section);
+      setDisplayedSection(section);
     }
   };
 
@@ -98,7 +63,6 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
             key={section}
             onPress={() => changeSection(section)}
             style={{ paddingVertical: 6, paddingHorizontal: 14 }}
-            disabled={isAnimating}
           >
             <View style={{ alignItems: 'center' }}>
               <Image source={sections[section].iconUrl} style={{ width: isTablet ? 100 : 80, height: isTablet ? 100 : 80, marginBottom: 5 }} />
@@ -122,7 +86,7 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
         {sections[displayedSection].items.map((item, index) => (
-          <Animated.View
+          <View
             key={item.id}
             style={{
               width: imageSize, // Dynamic image size based on screen width
@@ -130,18 +94,6 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
               padding: 10,
               backgroundColor: '#1f1f1f',
               borderRadius: 8,
-              transform: [
-                {
-                  translateY: animations[index]?.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [50, 0],
-                  }) || 0,
-                },
-              ],
-              opacity: animations[index]?.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 1],
-              }) || 0,
             }}
           >
             <TouchableOpacity onPress={() => openImageModal(item.pictureUrl)}>
@@ -164,14 +116,13 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
                 {item.price}
               </Text>
             </View>
-          </Animated.View>
+          </View>
         ))}
       </View>
 
       {/* Image Modal */}
       <Modal
         visible={isImageModalVisible}
-        animationType="fade"
         transparent={true}
         onRequestClose={closeImageModal}
       >
@@ -198,6 +149,3 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
 };
 
 export default MenuSection;
-
-
-
