@@ -57,6 +57,7 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
   ];
 
   return (
+    
     <View style={[styles.container, { padding }]}>
       <Text style={[styles.title, { fontSize: titleSize }]}>Please Select Category</Text>
       <View style={styles.grid}>

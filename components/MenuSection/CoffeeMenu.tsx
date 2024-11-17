@@ -11,6 +11,8 @@ const coffeeData = {
       { id: 2, name: "Cappuccino", price: "$4", pictureUrl: require('./Drink.jpg') },
       { id: 3, name: "Latte",  price: "$4.50", pictureUrl: require('./Drink.jpg') },
       { id: 4, name: "Americano", price: "$3.50", pictureUrl: require('./Drink.jpg') },
+      { id: 5, name: "Americano", price: "$3.50", pictureUrl: require('./Drink.jpg') }
+
     ],
   },
   icedCoffees: {
@@ -19,6 +21,7 @@ const coffeeData = {
     items: [
       { id: 1, name: "Iced Coffee",  price: "$3.50", pictureUrl: require('./Drink.jpg') },
       { id: 2, name: "Iced Latte", price: "$4.50", pictureUrl: require('./Drink.jpg') },
+      { id: 3, name: "Iced Latte", price: "$4.50", pictureUrl: require('./Drink.jpg') },
     ],
   },
 };

@@ -1,5 +1,5 @@
 import React, { useState, FC, useEffect } from 'react';
-import { ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 interface DrinkItem {
   id: number;
@@ -16,6 +16,7 @@ interface MenuSectionProps {
 
 const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) => {
   const [selectedSection, setSelectedSection] = useState(initialSection);
+  const [displayedSection, setDisplayedSection] = useState(initialSection);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
@@ -24,8 +25,15 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
   const isTablet = screenWidth > 600; // Rough threshold for tablet devices
   const imageSize = (screenWidth - 36) / (isTablet ? 4 : 2); // 4 items per row on tablets, 2 items on phones
 
+  useEffect(() => {
+    setDisplayedSection(initialSection);
+  }, [initialSection]);
+
   const changeSection = (section: keyof typeof sections) => {
-    setSelectedSection(section);
+    if (section !== selectedSection) {
+      setSelectedSection(section);
+      setDisplayedSection(section);
+    }
   };
 
   const openImageModal = (image: any) => {
@@ -39,9 +47,9 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: 'black', padding: 12 }}>
+    <ScrollView style={styles.mainContainer} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{ marginBottom: 12 }}>
-        <Text style={{ fontSize: 22, color: '#FACE8D', fontFamily: 'Dancing Script', textAlign: 'center' }}>
+        <Text style={{ fontSize: 22, color: '#FACE8D', textAlign: 'center' }}>
           {title}
         </Text>
         <Text style={{ fontSize: isTablet ? 32 : 28, color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
@@ -49,6 +57,7 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
         </Text>
       </View>
 
+      {/* Section Navigation */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 12 }}>
         {Object.keys(sections).map((section) => (
           <TouchableOpacity
@@ -72,12 +81,14 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
         ))}
       </ScrollView>
 
+      {/* Section Name */}
       <Text style={{ color: '#FACE8D', fontSize: isTablet ? 26 : 22, marginBottom: 8 }}>
-        {sections[selectedSection].name}
+        {sections[displayedSection].name}
       </Text>
 
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-        {sections[selectedSection].items.map((item) => (
+      {/* Item List */}
+      <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingBottom: 12 }}>
+        {sections[displayedSection].items.map((item, index) => (
           <View
             key={item.id}
             style={{
@@ -110,22 +121,12 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
             </View>
           </View>
         ))}
-      </View>
+      </ScrollView>
 
       {/* Image Modal */}
-      <Modal
-        visible={isImageModalVisible}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={closeImageModal}
-      >
+      <Modal visible={isImageModalVisible} transparent={true} onRequestClose={closeImageModal}>
         <TouchableWithoutFeedback onPress={closeImageModal}>
-          <View style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          }}>
+          <View style={styles.modalOverlay}>
             <Image
               source={selectedImage}
               style={{
@@ -140,5 +141,20 @@ const MenuSection: FC<MenuSectionProps> = ({ title, sections, initialSection }) 
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: 'black',
+    padding: 12,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    overflow: 'scroll', // Ensure scrolling of content
+  },
+});
 
 export default MenuSection;
