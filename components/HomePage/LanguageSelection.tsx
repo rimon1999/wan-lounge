@@ -70,7 +70,7 @@ const LanguageSelection: React.FC<Props> = ({ navigation }) => {
       >
         <ScrollView contentContainerStyle={styles.content}>
           <Text style={[styles.title, { fontFamily: 'Stash Regular' }]}>
-            THE PURE TASTE OF
+            The Pure Taste of
           </Text>
 
           <View style={styles.languageButtonsRow}>

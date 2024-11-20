@@ -11,7 +11,7 @@ const hookahData = {
     ],
   },
   special: {
-    name: "Special Blends",
+    name: "Wan Special Hookah",
     iconUrl: require('./images/SectionIcon.png'), // Add the icon
     items: [
       { id: 1, name: "Spicy Mango", price: "$22", pictureUrl: require('./Hookah.jpg') },

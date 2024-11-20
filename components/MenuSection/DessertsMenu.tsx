@@ -27,13 +27,23 @@ const dessertsData = {
       { id: 1, name: "Classic Kunafa", price: "$10", pictureUrl: require('./Dessert1.webp') },
     ],
   },
-  fruitsAndIceCream: {
+  fruits: {
     name: "Fruits",
     iconUrl: require('./images/SectionIcon.png'), // Add the icon
     items: [
       { id: 1, name: "Fruit Salad", price: "$7", pictureUrl: require('./Dessert1.webp') },
     ],
   },
+  cakes:{
+    name:"Cakes",
+    iconUrl: require('./images/SectionIcon.png'),
+    items:[
+      { id: 1, name: "Fruit Cake", price: "$7", pictureUrl: require('./Dessert1.webp') },
+
+
+    ]
+  }
+
 };
 
 const DessertsMenu = () => (

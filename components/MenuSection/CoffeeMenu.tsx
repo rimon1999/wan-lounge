@@ -5,7 +5,7 @@ import MenuSection from './MenuSection';
 const coffeeData = {
   hotCoffees: {
     name: "Hot Coffees",
-    iconUrl: require('./images/SectionIcon.png'), // Add an icon for the section
+    iconUrl: require('../../assets/images/Icons/Coffee/HotCoffee2.png'),
     items: [
       { id: 1, name: "Espresso", price: "$3", pictureUrl: require('./Drink.jpg') },
       { id: 2, name: "Cappuccino", price: "$4", pictureUrl: require('./Drink.jpg') },
@@ -24,6 +24,15 @@ const coffeeData = {
       { id: 3, name: "Iced Latte", price: "$4.50", pictureUrl: require('./Drink.jpg') },
     ],
   },
+  hotDrinks:{
+name: "Hot Drinks",
+iconUrl: require('./images/SectionIcon.png'),
+items:[
+  { id: 1, name: "Hot Drinks",  price: "$3.50", pictureUrl: require('./Drink.jpg') },
+  { id: 2, name: "Hot Drinks", price: "$4.50", pictureUrl: require('./Drink.jpg') },
+  { id: 3, name: "Hot Drinks", price: "$4.50", pictureUrl: require('./Drink.jpg') },
+]
+  }
 };
 
 const CoffeeMenu = () => (

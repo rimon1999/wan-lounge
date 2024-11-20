@@ -48,6 +48,7 @@ const drinksData = {
       { id: 1, name: "Classic Mojito", price: "$8", pictureUrl: require('./Drink.jpg') },
     ],
   },
+  
 };
 
 const ColdDrinksMenu = () => (
