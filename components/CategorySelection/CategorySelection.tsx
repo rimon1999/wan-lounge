@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import { useFonts } from 'expo-font'; // Import expo-font
 type RootStackParamList = {
   HookahMenu: undefined;
   ColdDrinksMenu: undefined;
@@ -26,7 +26,7 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
   const { width } = Dimensions.get('window');
   const isTablet = width > 600; // Adjust based on your definition of tablet
   const buttonWidth = isTablet ? '30%' : '48%';
-  const titleSize = isTablet ? 30 : 24;
+  const titleSize = isTablet ? 50 : 25;
   const padding = isTablet ? 24 : 16;
 
   const categories: Category[] = [
@@ -56,10 +56,23 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
     }
   ];
 
+  // Load the custom font from assets
+  const [fontsLoaded] = useFonts({
+    'Stash Regular': require('../../assets/fonts/stash/Stash Regular.otf'),
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: '#FDEAC1', fontSize: 20 }}>Loading fonts...</Text>
+      </View>
+    );
+  }
+
   return (
-    
     <View style={[styles.container, { padding }]}>
-      <Text style={[styles.title, { fontSize: titleSize }]}>Please Select Category</Text>
+      <Text style={[styles.title, { fontSize: titleSize, fontFamily: 'Stash Regular' }]}>
+Please Select Catagory      </Text>
       <View style={styles.grid}>
         {categories.map((category) => (
           <TouchableOpacity
@@ -69,7 +82,9 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => 
           >
             <Image source={category.image} style={styles.categoryImage} />
             <View style={styles.overlay}>
-              <Text style={styles.categoryText}>{category.name}</Text>
+              <Text style={[styles.categoryText, { fontFamily: 'Stash Regular' }]}>
+                {category.name}
+              </Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -82,12 +97,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1a1a1a',
+    
+    
   },
   title: {
-    fontWeight: 'bold',
     color: '#FDEAC1',
     textAlign: 'center',
     marginBottom: 20,
+    
   },
   grid: {
     flexDirection: 'row',

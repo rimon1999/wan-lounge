@@ -1,4 +1,3 @@
-// RestaurantLanding.tsx
 import React from 'react';
 import {
   View,
@@ -10,16 +9,23 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack'; // Import navigation types
 import styles from './LanguageSelectionStyles'; // Import the styles
+import { useFonts } from 'expo-font'; // Import expo-font
+import { StatusBar } from 'react-native';
 
 interface LanguageButtonProps {
   title: string;
   onPress: () => void;
 }
 
+interface Props {
+  navigation: StackNavigationProp<any, any>; // Replace `any` with your navigation type
+}
+
 const LanguageButton: React.FC<LanguageButtonProps> = ({ title, onPress }) => (
-  <TouchableOpacity 
-    style={styles.languageButton} 
+  <TouchableOpacity
+    style={styles.languageButton}
     onPress={onPress}
     accessible={true}
     accessibilityLabel={`Select ${title} language`}
@@ -28,30 +34,45 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({ title, onPress }) => (
   </TouchableOpacity>
 );
 
-const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
+const LanguageSelection: React.FC<Props> = ({ navigation }) => {
   const handleLanguageSelect = (language: string) => {
     console.log(`Selected language: ${language}`);
     navigation.navigate('CategorySelection');
   };
 
   const handleSocialMediaPress = (platform: string) => {
-    const links = {
+    const links: { [key: string]: string } = {
       facebook: 'https://facebook.com/montanarestaurant',
       instagram: 'https://instagram.com/montanarestaurant',
-      snapchat: 'https://snapchat.com/add/montanarestaurant',
     };
-    Linking.openURL(links[platform as keyof typeof links]);
+    Linking.openURL(links[platform]);
   };
+
+  // Load the custom fonts from assets
+  const [fontsLoaded] = useFonts({
+    'Stash Regular': require('../../assets/fonts/stash/Stash Regular.otf'),
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={{ color: '#FDEAC1', fontSize: 20 }}>Loading fonts...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
         style={styles.background}
         source={require('../../assets/images/Icons/HomePage/homePage.jpg')}
+        resizeMode="cover" // Ensures image covers the full screen without distortion
       >
         <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.title}> Your Favorite Coffee Spot</Text>
-          
+          <Text style={[styles.title, { fontFamily: 'Stash Regular' }]}>
+            THE PURE TASTE OF
+          </Text>
+
           <View style={styles.languageButtonsRow}>
             <LanguageButton title="كوردي" onPress={() => handleLanguageSelect('kurdish')} />
             <LanguageButton title="عربي" onPress={() => handleLanguageSelect('arabic')} />
@@ -59,21 +80,16 @@ const LanguageSelection: React.FC<{ navigation: any }> = ({ navigation }) => {
           </View>
 
           <View style={styles.socialMediaContainer}>
-            <TouchableOpacity onPress={() => handleSocialMediaPress('facebook')}>
-              <Image 
-                source={require('../../assets/images/Icons/SocialMedia/1/facebook.png')}
-                style={styles.socialIcon}
-              />
-            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => handleSocialMediaPress('instagram')}>
-              <Image 
+              <Image
                 source={require('../../assets/images/Icons/SocialMedia/1/instagram.png')}
                 style={styles.socialIcon}
               />
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.location}>Zaxo, New Zaxo</Text>
+          {/* <Text style={styles.location}></Text> */}
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
